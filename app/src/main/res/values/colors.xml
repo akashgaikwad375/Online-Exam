@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#23729a</color>
+    <color name="colorAccent">#2d9a59</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white_transparent">#33ffffff</color>
+    <color name="white_transparent_70">#B3ffffff</color>
+    <color name="white_transparent_light">#B3ffffff</color>
+    <color name="white_transparent_dense">#CCffffff</color>
+
+    <color name="sign_in_button_color">#23729a</color>
+</resources>

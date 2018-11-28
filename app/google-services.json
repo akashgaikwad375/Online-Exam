@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "542744296432",
+    "firebase_url": "https://online-exam-41752.firebaseio.com",
+    "project_id": "online-exam-41752",
+    "storage_bucket": "online-exam-41752.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542744296432:android:daa504a0e22a5f95",
+        "android_client_info": {
+          "package_name": "com.exam.onlineexam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "542744296432-5hs0qkqd8et54j9pkltb9o18c8464dq1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.exam.onlineexam",
+            "certificate_hash": "8e9339ede0dcc677fd7c9469d122e60ecb0a516a"
+          }
+        },
+        {
+          "client_id": "542744296432-mcvk4bgkpj1bmcs9dsgq334oahp25end.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMSgSgeNTJpmopf_qCeSUC44OXPo6q5Qk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "542744296432-mcvk4bgkpj1bmcs9dsgq334oahp25end.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
