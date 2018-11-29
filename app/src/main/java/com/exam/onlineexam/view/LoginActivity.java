@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthSettings;
+import com.google.firebase.auth.FirebaseUser;
 
 import static com.exam.onlineexam.Constants.LOGGED_IN;
 import static com.exam.onlineexam.Constants.ONLINE_EXAM;
@@ -88,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         fabNavigateSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
