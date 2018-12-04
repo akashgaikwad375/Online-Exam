@@ -1,17 +1,17 @@
 package com.exam.onlineexam.model;
 
 public class Result {
-    public String email = "";
+    public String testName = "";
     public String testDate = "";
     public int testMarks = 0;
     public int questionAttemted = 0;
 
-    public String getEmail() {
-        return email;
+    public String getTestName() {
+        return testName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTestName(String testName) {
+        this.testName = testName;
     }
 
     public String getTestDate() {
@@ -38,9 +38,9 @@ public class Result {
         this.questionAttemted = questionAttemted;
     }
 
-    public static Result createResult(String email, String date, int marks, int questionAttemted) {
+    public static Result createResult(String testName, String date, int marks, int questionAttemted) {
         Result result = new Result();
-        result.email = email;
+        result.testName = testName;
         result.testDate = date;
         result.testMarks = marks;
         result.questionAttemted = questionAttemted;

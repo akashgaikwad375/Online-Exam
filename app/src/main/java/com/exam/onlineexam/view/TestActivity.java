@@ -142,7 +142,7 @@ public class TestActivity extends AppCompatActivity implements View.OnClickListe
             if (auth.getCurrentUser() != null) {
                 String userId = auth.getCurrentUser().getUid();
                 String date = Utils.getCurrentDate();
-                Result result = Result.createResult(auth.getCurrentUser().getEmail(), date ,marks,questionAttempted);
+                Result result = Result.createResult(getIntent().getStringExtra(TEST_SELECTED), date ,marks,questionAttempted);
                 DatabaseReference questionRef = FirebaseDatabase.getInstance().getReference("Results/"+userId);
                 String key = questionRef.push().getKey();
                 if(key !=  null)

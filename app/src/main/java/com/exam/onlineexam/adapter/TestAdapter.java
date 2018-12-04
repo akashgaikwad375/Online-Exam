@@ -37,7 +37,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         this.context =context;
         this.tests = tests;
         this.listener = listener;
-        testSize = (int) (context.getResources().getDisplayMetrics().widthPixels*0.5);
+        testSize = (int) (context.getResources().getDisplayMetrics().widthPixels*0.6);
     }
 
     @NonNull

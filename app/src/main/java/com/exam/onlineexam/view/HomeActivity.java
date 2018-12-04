@@ -1,58 +1,54 @@
 package com.exam.onlineexam.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.exam.onlineexam.ProgressPopUp;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.exam.onlineexam.R;
-import com.exam.onlineexam.Utils;
-import com.exam.onlineexam.adapter.TestAdapter;
-import com.exam.onlineexam.model.Question;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.exam.onlineexam.Constants.LOGGED_IN;
 import static com.exam.onlineexam.Constants.ONLINE_EXAM;
-import static com.exam.onlineexam.Constants.TEST_QUESTIONS;
-import static com.exam.onlineexam.Constants.TEST_SELECTED;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView txtLogout, txtEmail;
-    RecyclerView rvTests;
+    private TextView txtLogout, txtUserEmail, txtUserName, txtCheckResults, txtTestResults, txtAddQuestions, lblTitle;
     private SharedPreferences pref;
     private FirebaseAuth auth;
-    private ProgressPopUp popUp;
-    private TestAdapter adapter;
-    private Button btnRetry;
-    private AlertDialog dialog;
     private DrawerLayout drawerLayout;
-    private ImageButton btnBack;
-    private ConstraintLayout clNavigation;
+    private ImageButton btnBack, btnNavBack;
+    private Fragment testListFragment;
+    private ImageView imgProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +58,38 @@ public class HomeActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         pref = getSharedPreferences(ONLINE_EXAM, Context.MODE_PRIVATE);
 
-        txtEmail = findViewById(R.id.txt_email);
+        lblTitle = findViewById(R.id.lbl_title);
+        txtUserName = findViewById(R.id.txt_user_name);
+        txtUserEmail = findViewById(R.id.txt_user_email);
         txtLogout = findViewById(R.id.txt_logout);
+        txtAddQuestions = findViewById(R.id.txt_add_question);
+        txtTestResults = findViewById(R.id.txt_test_result);
+        txtCheckResults = findViewById(R.id.txt_check_result);
         btnBack = findViewById(R.id.btn_back);
+        btnNavBack = findViewById(R.id.btn_nav_back);
         drawerLayout = findViewById(R.id.drawer);
-        clNavigation = findViewById(R.id.cl_navigation);
-        btnRetry = findViewById(R.id.btn_retry);
-        rvTests = findViewById(R.id.rv_tests);
+        imgProfile = findViewById(R.id.img_profile);
+
+        testListFragment = new TestListFragment();
+        loadFragment(testListFragment, "Home");
 
         if (auth.getCurrentUser() != null) {
-            txtEmail.setText(auth.getCurrentUser().getEmail());
+            txtUserEmail.setText(auth.getCurrentUser().getEmail());
+            txtUserName.setText(auth.getCurrentUser().getDisplayName());
+
+            File file = new File(getApplicationContext().getFilesDir() + "/TEMP/" + auth.getCurrentUser().getUid() + "/PROFILE_IMAGE.jpg");
+            if(file.exists()) {
+                Glide.with(this)
+                        .load(file)
+                        .apply(new RequestOptions().optionalCircleCrop())
+                        .into(imgProfile);
+            } else {
+                Glide.with(this)
+                        .load(R.drawable.ic_person_black_24dp)
+                        .apply(new RequestOptions().optionalCircleCrop())
+                        .into(imgProfile);
+            }
+
             FirebaseDatabase.getInstance().getReference("Admin")
                     .addValueEventListener(new ValueEventListener() {
                         @Override
@@ -80,166 +98,151 @@ public class HomeActivity extends AppCompatActivity {
                             for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                                 admins.add(dataSnapshot1.getValue(String.class));
                             }
-                            if(admins.contains(auth.getCurrentUser().getEmail())){
-                                clNavigation.setVisibility(View.VISIBLE);
-                                btnBack.setVisibility(View.VISIBLE);
-                                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                            if (admins.contains(auth.getCurrentUser().getEmail())) {
+                                txtAddQuestions.setVisibility(View.VISIBLE);
+                                txtCheckResults.setVisibility(View.VISIBLE);
                             } else {
-                                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                                clNavigation.setVisibility(View.GONE);
-                                btnBack.setVisibility(View.GONE);
+                                txtAddQuestions.setVisibility(View.GONE);
+                                txtCheckResults.setVisibility(View.GONE);
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                            clNavigation.setVisibility(View.GONE);
-                            btnBack.setVisibility(View.GONE);
-                            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                            txtAddQuestions.setVisibility(View.GONE);
+                            txtCheckResults.setVisibility(View.GONE);
                         }
                     });
-        }else {
-            clNavigation.setVisibility(View.GONE);
-            btnBack.setVisibility(View.GONE);
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        } else {
+            txtAddQuestions.setVisibility(View.GONE);
+            txtCheckResults.setVisibility(View.GONE);
+            Glide.with(this)
+                    .load(R.color.sign_in_button_color)
+                    .apply(new RequestOptions().optionalCircleCrop())
+                    .into(imgProfile);
         }
+        txtLogout.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
+        btnNavBack.setOnClickListener(this);
+        txtAddQuestions.setOnClickListener(this);
+        txtTestResults.setOnClickListener(this);
+        txtCheckResults.setOnClickListener(this);
+        imgProfile.setOnClickListener(this);
+    }
 
-        setTests();
+    private void loadFragment(Fragment fragment, String title) {
+        lblTitle.setText(title);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.add(R.id.fl_contain, fragment).addToBackStack(fragment.getClass().getSimpleName());
+        fragmentTransaction.commitAllowingStateLoss();
+    }
 
-        txtLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().
+                    getBackStackEntryCount() - 1).getName().equals(TestListFragment.class.getSimpleName()))
+                finish();
+            else {
+                getSupportFragmentManager().popBackStack(TestListFragment.class.getSimpleName(), 0);
+                lblTitle.setText("Home");
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_back:
+                drawerLayout.openDrawer(GravityCompat.START);
+                break;
+            case R.id.btn_nav_back:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.txt_logout:
                 auth.signOut();
                 pref.edit().putBoolean(LOGGED_IN, false).commit();
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
                 finish();
                 overridePendingTransition(R.anim.slide_from_left, R.anim.no_anim);
-            }
-        });
-
-        btnRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setTests();
-            }
-        });
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+                break;
+            case R.id.txt_add_question:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                Fragment fm = getSupportFragmentManager().findFragmentById(R.id.fl_contain);
+                if (!(fm instanceof AddQuestionFragment))
+                    loadFragment(new AddQuestionFragment(), "Add Question");
+                break;
+            case R.id.txt_check_result:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                Fragment fm1 = getSupportFragmentManager().findFragmentById(R.id.fl_contain);
+                if (!(fm1 instanceof CheckUserTestResultFragment))
+                    loadFragment(new CheckUserTestResultFragment(), "Check User Results");
+                break;
+            case R.id.txt_test_result:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                Fragment fm2 = getSupportFragmentManager().findFragmentById(R.id.fl_contain);
+                if (!(fm2 instanceof TestResultFragment))
+                    loadFragment(new TestResultFragment(), "Test Results");
+                break;
+            case R.id.img_profile:
+                selectImage();
+                break;
+            default:
+                break;
+        }
     }
 
-    private void setTests() {
-        if (Utils.isConnectedToInternet(HomeActivity.this)) {
-            btnRetry.setVisibility(View.GONE);
-            popUp = new ProgressPopUp(HomeActivity.this);
-            popUp.showLoading();
-            FirebaseDatabase.getInstance().getReference("TestNames")
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            ArrayList tests = new ArrayList();
-                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                tests.add(dataSnapshot1.getValue());
-                            }
-                            popUp.dismissLoading();
-                            adapter = new TestAdapter(HomeActivity.this, tests,
-                                    new TestAdapter.OnTestStartClickListener() {
-                                        @Override
-                                        public void onStartClick(View view, int position, final String testName) {
-                                            if (dialog == null) {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this)
-                                                        .setTitle("Test Instructions")
-                                                        .setMessage(R.string.test_rules)
-                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                                dialogInterface.dismiss();
-                                                                if (dialog != null) {
-                                                                    dialog.dismiss();
-                                                                    dialog = null;
-                                                                }
-                                                                getQuestions(testName);
-                                                            }
-                                                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                                dialogInterface.dismiss();
-                                                                if (dialog != null) {
-                                                                    dialog.dismiss();
-                                                                    dialog = null;
-                                                                }
-                                                            }
-                                                        }).setCancelable(false);
-                                                dialog = builder.create();
-                                                dialog.show();
-                                            }
-                                        }
-                                    });
-                            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(HomeActivity.this, R.anim.layout_animation_from_bottom);
-                            rvTests.setAdapter(adapter);
-                            rvTests.setLayoutAnimation(animation);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            popUp.dismissLoading();
-                        }
-                    });
-        } else btnRetry.setVisibility(View.VISIBLE);
+    private void selectImage() {
+        if (ActivityCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(intent, 1000);
+        } else {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{(Manifest.permission.READ_EXTERNAL_STORAGE)},
+                    100
+            );
+        }
     }
 
-    void addQuestion() {
-        if (Utils.isConnectedToInternet(HomeActivity.this)) {
-            for (int i = 1; i <= 30; i++) {
-                Question question = Question.createQuestion("Question: " + i, "option 1", "option 2",
-                        "option 3", "option 4", "" + (i % 4));
-                DatabaseReference questionRef = FirebaseDatabase.getInstance().getReference("Questions/C Programming");
-                String key = questionRef.push().getKey();
-                questionRef.child(key).setValue(question);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            try {
+                final Bitmap b = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                Glide.with(HomeActivity.this).load(b)
+                        .apply(new RequestOptions().optionalCircleCrop())
+                        .into(imgProfile);
+                if (auth.getCurrentUser() != null) {
+                    File dir = new File(getApplicationContext().getFilesDir(), "/TEMP/" + auth.getCurrentUser().getUid());
+                    if (!dir.exists())
+                        dir.mkdirs();
+                    File file = new File(getApplicationContext().getFilesDir() + "/TEMP/" + auth.getCurrentUser().getUid() + "/PROFILE_IMAGE.jpg");
+                    try {
+                        FileOutputStream out = new FileOutputStream(file);
+                        b.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    private void getQuestions(final String testName) {
-        if (Utils.isConnectedToInternet(HomeActivity.this)) {
-            popUp = new ProgressPopUp(HomeActivity.this);
-            popUp.showLoading();
-            FirebaseDatabase.getInstance().getReference("Questions/" +testName)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            popUp.dismissLoading();
-                            ArrayList<Question> tests = new ArrayList<Question>();
-                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                tests.add(dataSnapshot1.getValue(Question.class));
-                            }
-                            Collections.shuffle(tests);
-                            ArrayList<Question> tests1 = new ArrayList<Question>();
-                            if(tests.size()>=30) {
-                                for (int i = 0; i < 30; i++) {
-                                    tests1.add(tests.get(i));
-                                }
-                                startActivity(new Intent(HomeActivity.this, TestActivity.class)
-                                        .putExtra(TEST_SELECTED, testName)
-                                        .putExtra(TEST_QUESTIONS, tests1));
-                                overridePendingTransition(R.anim.slide_from_right, R.anim.no_anim);
-                            }else {
-                                Toast.makeText(HomeActivity.this, "Data not available", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            popUp.dismissLoading();
-                        }
-                    });
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            selectImage();
         }
     }
-
 }
