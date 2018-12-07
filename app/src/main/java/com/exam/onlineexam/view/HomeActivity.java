@@ -117,7 +117,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             txtAddQuestions.setVisibility(View.GONE);
             txtCheckResults.setVisibility(View.GONE);
             Glide.with(this)
-                    .load(R.color.sign_in_button_color)
+                    .load(R.drawable.ic_person_black_24dp)
                     .apply(new RequestOptions().optionalCircleCrop())
                     .into(imgProfile);
         }
