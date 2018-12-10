@@ -65,7 +65,8 @@ public class TestResultFragment extends Fragment {
                             }
                             popUp.dismissLoading();
                             if(!results.isEmpty()){
-                                adapter = new TestResultAdapter(getActivity(), results);
+                                int size = (int) (getActivity().getResources().getDisplayMetrics().widthPixels*0.9);
+                                adapter = new TestResultAdapter(getActivity(), results, size);
                                 rvTestResults.addItemDecoration(new SpacesItemDecoration(48));
                                 LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_from_bottom);
                                 rvTestResults.setAdapter(adapter);

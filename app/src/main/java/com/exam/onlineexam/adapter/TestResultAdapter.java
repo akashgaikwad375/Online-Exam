@@ -21,10 +21,10 @@ public class TestResultAdapter extends RecyclerView.Adapter<TestResultAdapter.Te
     private int size = 0;
     private ArrayList<Result> results;
 
-    public TestResultAdapter(Context context, ArrayList<Result> list){
+    public TestResultAdapter(Context context, ArrayList<Result> list, int size){
         this.context = context;
         results = list;
-        size = (int) (context.getResources().getDisplayMetrics().widthPixels*0.9);
+        this.size = size;
     }
 
     @NonNull
@@ -39,7 +39,7 @@ public class TestResultAdapter extends RecyclerView.Adapter<TestResultAdapter.Te
         holder.clRoot.getLayoutParams().width = size;
         holder.txtAttempedCount.setText(results.get(position).getQuestionAttemted()+"");
         holder.txtTestName.setText(results.get(position).getTestName());
-        holder.txtMarks.setText(results.get(position).getTestMarks()+"/30");
+        holder.txtMarks.setText(String.format("%2d", results.get(position).getTestMarks())+"/30");
         holder.txtDate.setText("Date: "+results.get(position).getTestDate());
     }
 

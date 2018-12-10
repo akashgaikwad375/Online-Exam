@@ -99,7 +99,8 @@ public class CheckUserTestResultFragment extends Fragment implements AdapterView
                             }
                             popUp.dismissLoading();
                             if (!results.isEmpty()) {
-                                adapter = new TestResultAdapter(getActivity(), results);
+                                int size = (int) (getActivity().getResources().getDisplayMetrics().widthPixels*0.9);
+                                adapter = new TestResultAdapter(getActivity(), results, size);
                                 rvResult.addItemDecoration(new SpacesItemDecoration(48));
                                 LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_from_bottom);
                                 rvResult.setAdapter(adapter);

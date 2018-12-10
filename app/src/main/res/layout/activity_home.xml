@@ -64,7 +64,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/cl_navigation"
+        android:id="@+id/cl_nav"
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -72,145 +72,160 @@
         android:background="@color/white"
         android:fitsSystemWindows="true">
 
-        <LinearLayout
-            android:id="@+id/ll_profile"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/btn_nav_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="16dp"
-                android:layout_gravity="end"
-                android:tint="@color/sign_in_button_color"
-                android:src="@drawable/ic_keyboard_backspace_black_24dp" />
-
-            <ImageView
-                android:id="@+id/img_profile"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_gravity="center"
-                android:tint="@color/sign_in_button_color"
-                android:src="@drawable/ic_person_black_24dp"/>
-
-            <TextView
-                android:id="@+id/txt_user_name"
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/cl_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="Name"
-                android:singleLine="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/sign_in_button_color"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/ll_profile"/>
+                android:layout_gravity="start"
+                android:background="@color/white"
+                android:fitsSystemWindows="true">
 
-            <TextView
-                android:id="@+id/txt_user_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="Email id"
-                android:singleLine="true"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:textColor="@color/sign_in_button_color"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/txt_user_name"/>
+                <LinearLayout
+                    android:id="@+id/ll_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="24dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:orientation="vertical">
 
-        </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/btn_nav_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:padding="16dp"
+                        android:layout_gravity="end"
+                        android:tint="@color/sign_in_button_color"
+                        android:src="@drawable/ic_keyboard_backspace_black_24dp" />
 
-        <TextView
-            android:id="@+id/txt_test_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:text="Test Results"
-            android:orientation="vertical"
-            android:singleLine="true"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textColor="@color/sign_in_button_color"
-            android:background="@drawable/bg_admin_tab"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/ll_profile"/>
+                    <ImageView
+                        android:id="@+id/img_profile"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_person_black_24dp"/>
 
-        <TextView
-            android:id="@+id/txt_add_question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:text="Add Questions"
-            android:singleLine="true"
-            android:visibility="gone"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textColor="@color/sign_in_button_color"
-            android:background="@drawable/bg_admin_tab"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/txt_test_result"/>
+                    <TextView
+                        android:id="@+id/txt_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="Name"
+                        android:singleLine="true"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:textColor="@color/sign_in_button_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/ll_profile"/>
 
-        <TextView
-            android:id="@+id/txt_check_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:text="Check User Results"
-            android:orientation="vertical"
-            android:singleLine="true"
-            android:paddingTop="16dp"
-            android:visibility="gone"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textColor="@color/sign_in_button_color"
-            android:background="@drawable/bg_admin_tab"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/txt_add_question"/>
+                    <TextView
+                        android:id="@+id/txt_user_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="Email id"
+                        android:singleLine="true"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:textColor="@color/sign_in_button_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/txt_user_name"/>
 
-        <TextView
-            android:id="@+id/txt_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="Logout"
-            android:singleLine="true"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:textColor="@color/sign_in_button_color"
-            android:background="@drawable/bg_admin_last_tab"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/txt_check_result"
-            app:layout_constraintVertical_chainStyle="packed" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_test_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:text="Test Results"
+                    android:orientation="vertical"
+                    android:singleLine="true"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/sign_in_button_color"
+                    android:background="@drawable/bg_admin_tab"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/ll_profile"/>
+
+                <TextView
+                    android:id="@+id/txt_add_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:text="Add Questions"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/sign_in_button_color"
+                    android:background="@drawable/bg_admin_tab"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/txt_test_result"/>
+
+                <TextView
+                    android:id="@+id/txt_check_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:text="Check User Results"
+                    android:orientation="vertical"
+                    android:singleLine="true"
+                    android:paddingTop="16dp"
+                    android:visibility="gone"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/sign_in_button_color"
+                    android:background="@drawable/bg_admin_tab"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/txt_add_question"/>
+
+                <TextView
+                    android:id="@+id/txt_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="Logout"
+                    android:singleLine="true"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:textColor="@color/sign_in_button_color"
+                    android:background="@drawable/bg_admin_last_tab"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/txt_check_result"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
 
     </android.support.constraint.ConstraintLayout>
+
 </android.support.v4.widget.DrawerLayout>

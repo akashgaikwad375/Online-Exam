@@ -85,8 +85,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         .into(imgProfile);
             } else {
                 Glide.with(this)
-                        .load(R.drawable.ic_person_black_24dp)
-                        .apply(new RequestOptions().optionalCircleCrop())
+                        .load(R.drawable.ic_profile)
                         .into(imgProfile);
             }
 
@@ -117,7 +116,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             txtAddQuestions.setVisibility(View.GONE);
             txtCheckResults.setVisibility(View.GONE);
             Glide.with(this)
-                    .load(R.drawable.ic_person_black_24dp)
+                    .load(R.drawable.ic_profile)
                     .apply(new RequestOptions().optionalCircleCrop())
                     .into(imgProfile);
         }

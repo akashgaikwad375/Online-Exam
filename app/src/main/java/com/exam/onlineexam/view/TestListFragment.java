@@ -21,6 +21,7 @@ import com.exam.onlineexam.R;
 import com.exam.onlineexam.Utils;
 import com.exam.onlineexam.adapter.TestAdapter;
 import com.exam.onlineexam.model.Question;
+import com.exam.onlineexam.model.QuestionModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -131,12 +132,12 @@ public class TestListFragment extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             popUp.dismissLoading();
-                            ArrayList<Question> tests = new ArrayList<Question>();
+                            ArrayList<QuestionModel> tests = new ArrayList<QuestionModel>();
                             for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                tests.add(dataSnapshot1.getValue(Question.class));
+                                tests.add(dataSnapshot1.getValue(QuestionModel.class));
                             }
                             Collections.shuffle(tests);
-                            ArrayList<Question> tests1 = new ArrayList<Question>();
+                            ArrayList<QuestionModel> tests1 = new ArrayList<QuestionModel>();
                             if (tests.size() >= 30) {
                                 for (int i = 0; i < 30; i++) {
                                     tests1.add(tests.get(i));
