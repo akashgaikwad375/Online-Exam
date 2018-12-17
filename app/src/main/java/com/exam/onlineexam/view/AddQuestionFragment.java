@@ -171,7 +171,15 @@ public class AddQuestionFragment extends Fragment implements AdapterView.OnItemS
             if(TextUtils.isEmpty(selectTestName))
                 selectTestName = spin.getSelectedItem().toString();
 
-            DatabaseReference questionRef = FirebaseDatabase.getInstance().getReference("Questions/"+selectTestName);
+            String testName = selectTestName;
+            if (selectTestName.equals("New Test")) {
+                testName = edtNewTestName.getText().toString().trim();
+                DatabaseReference testReference = FirebaseDatabase.getInstance().getReference("TestNames");
+                String key = testReference.push().getKey();
+                testReference.child(key).setValue(testName);
+            }
+
+            DatabaseReference questionRef = FirebaseDatabase.getInstance().getReference("Questions/"+testName);
             String key = questionRef.push().getKey();
             questionRef.child(key).setValue(question);
             edtQuestion.setText("");

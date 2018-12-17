@@ -37,15 +37,21 @@ public class TestResultAdapter extends RecyclerView.Adapter<TestResultAdapter.Te
     @Override
     public void onBindViewHolder(@NonNull TestResultViewHolder holder, int position) {
         holder.clRoot.getLayoutParams().width = size;
-        holder.txtAttempedCount.setText(results.get(position).getQuestionAttemted()+"");
+        holder.txtAttempedCount.setText(String.format("%02d", results.get(position).getQuestionAttemted()));
         holder.txtTestName.setText(results.get(position).getTestName());
-        holder.txtMarks.setText(String.format("%2d", results.get(position).getTestMarks())+"/30");
+        holder.txtMarks.setText(String.format("%02d", results.get(position).getTestMarks())+"/30");
         holder.txtDate.setText("Date: "+results.get(position).getTestDate());
+    }
+
+    public void setList(ArrayList<Result> results){
+        this.results = results;
     }
 
     @Override
     public int getItemCount() {
-        return results.size();
+        if(results == null)
+            return 0;
+        else return results.size();
     }
 
     class TestResultViewHolder extends RecyclerView.ViewHolder{

@@ -101,14 +101,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
             rbtnOption4 = itemView.findViewById(R.id.rbtn_option4);
             rgOptions = itemView.findViewById(R.id.rg_options);
 
-           /* rgOptions.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    RadioButton radioButton = radioGroup.findViewById(i);
-                    selectedOptions[getAdapterPosition()] = radioButton.getTag().toString();
-                }
-            });*/
-
             rbtnOption1.setOnClickListener(this);
             rbtnOption2.setOnClickListener(this);
             rbtnOption3.setOnClickListener(this);

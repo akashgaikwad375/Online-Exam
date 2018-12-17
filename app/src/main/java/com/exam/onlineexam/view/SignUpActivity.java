@@ -64,34 +64,42 @@ public class SignUpActivity extends AppCompatActivity {
                                             popUp.dismissLoading();
                                             Toast.makeText(SignUpActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                            FirebaseUser user = auth.getCurrentUser();
 
-                                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                    .setDisplayName(edtName.getText().toString())
-                                                    .build();
+                                            if(user != null && user.getEmail() != null) {
+                                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                        .setDisplayName(edtName.getText().toString())
+                                                        .build();
+                                                DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Users");
+                                                userReference.child(user.getUid()).setValue(user.getEmail());
 
-                                            user.updateProfile(profileUpdates)
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            popUp.dismissLoading();
-                                                            onBackPressed();
-                                                        }
-                                                    })
-                                                    .addOnCanceledListener(SignUpActivity.this, new OnCanceledListener() {
-                                                        @Override
-                                                        public void onCanceled() {
-                                                            popUp.dismissLoading();
-                                                            onBackPressed();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(SignUpActivity.this, new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            popUp.dismissLoading();
-                                                            onBackPressed();
-                                                        }
-                                                    });
+                                                user.updateProfile(profileUpdates)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                popUp.dismissLoading();
+                                                                onBackPressed();
+                                                            }
+                                                        })
+                                                        .addOnCanceledListener(SignUpActivity.this, new OnCanceledListener() {
+                                                            @Override
+                                                            public void onCanceled() {
+                                                                popUp.dismissLoading();
+                                                                onBackPressed();
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(SignUpActivity.this, new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                popUp.dismissLoading();
+                                                                onBackPressed();
+                                                            }
+                                                        });
+                                                Toast.makeText(SignUpActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                popUp.dismissLoading();
+                                                onBackPressed();
+                                            }
                                         }
                                     }
                                 })

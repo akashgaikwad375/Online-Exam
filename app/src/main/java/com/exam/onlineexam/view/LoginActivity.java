@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
                                         } else {
                                             pref.edit().putBoolean(LOGGED_IN, true).commit();
+                                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                             finish();
                                             overridePendingTransition(R.anim.no_anim, R.anim.slide_to_left);

@@ -46,6 +46,12 @@ public class TestResultFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         rvTestResults = view.findViewById(R.id.rv_test_results);
         btnRetry = view.findViewById(R.id.btn_retry);
+        int size = (int) (getActivity().getResources().getDisplayMetrics().widthPixels*0.9);
+        adapter = new TestResultAdapter(getActivity(), null, size);
+        rvTestResults.addItemDecoration(new SpacesItemDecoration(48));
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_from_bottom);
+        rvTestResults.setAdapter(adapter);
+        rvTestResults.setLayoutAnimation(animation);
         setResult();
     }
 
@@ -64,13 +70,9 @@ public class TestResultFragment extends Fragment {
                                 results.add(dataSnapshot1.getValue(Result.class));
                             }
                             popUp.dismissLoading();
-                            if(!results.isEmpty()){
-                                int size = (int) (getActivity().getResources().getDisplayMetrics().widthPixels*0.9);
-                                adapter = new TestResultAdapter(getActivity(), results, size);
-                                rvTestResults.addItemDecoration(new SpacesItemDecoration(48));
-                                LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_animation_from_bottom);
-                                rvTestResults.setAdapter(adapter);
-                                rvTestResults.setLayoutAnimation(animation);
+                            if(!results.isEmpty() && adapter != null){
+                                adapter.setList(results);
+                                adapter.notifyDataSetChanged();
                             }
                         }
 
