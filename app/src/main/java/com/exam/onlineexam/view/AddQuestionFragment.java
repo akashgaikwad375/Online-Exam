@@ -191,4 +191,10 @@ public class AddQuestionFragment extends Fragment implements AdapterView.OnItemS
             Toast.makeText(getActivity(), "Question added", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        edtNewTestName.clearFocus();
+    }
 }

@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TestResultFragment extends Fragment {
 
@@ -71,6 +72,7 @@ public class TestResultFragment extends Fragment {
                             }
                             popUp.dismissLoading();
                             if(!results.isEmpty() && adapter != null){
+                                Collections.reverse(results);
                                 adapter.setList(results);
                                 adapter.notifyDataSetChanged();
                             }
